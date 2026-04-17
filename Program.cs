@@ -6,6 +6,7 @@ using System.CommandLine;
 
 var services = new ServiceCollection();
 services.AddSingleton<ILLMProvider, GeminiProvider>();
+services.AddTransient<RepositoryScanner>();
 services.AddTransient<VerifyVsaComplianceHandler>();
 var serviceProvider = services.BuildServiceProvider();
 

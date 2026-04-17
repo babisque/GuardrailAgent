@@ -2,28 +2,50 @@
 
 public record VerifyVsaRequest(string TargetFilePath, string ProviderName);
 
-public class VerifyVsaComplianceHandler
+public class VerifyVsaComplianceHandler(IEnumerable<ILLMProvider> providers, RepositoryScanner scanner)
 {
-    private readonly IEnumerable<ILLMProvider> _provider;
-
-    public VerifyVsaComplianceHandler(IEnumerable<ILLMProvider> providers)
-    {
-        _provider = providers;
-    }
-
     public async Task HandleAsync(VerifyVsaRequest request)
     {
-        var provider = _provider.FirstOrDefault(p => p.ProviderName == request.ProviderName)
+        var provider = providers.FirstOrDefault(p => p.ProviderName == request.ProviderName)
             ?? throw new ArgumentException("Provider not found");
 
-        var code = await File.ReadAllTextAsync(request.TargetFilePath);
+        var rules = await File.ReadAllTextAsync("Core/rules/vsa-playbook.md");
 
-        var rules = await File.ReadAllTextAsync("rules/vsa-playbook.md");
+        if (Directory.Exists(request.TargetFilePath) &&
+            Directory.GetDirectories(request.TargetFilePath, "Features").Any())
+        {
+            var slices = scanner.FindSlices(request.TargetFilePath);
 
-        Console.WriteLine($"\n🔍 Analyzing: {Path.GetFileName(request.TargetFilePath)}...");
+            foreach (var slicePath in slices)
+            {
+                await AnalyzeSlice(slicePath, provider, rules);
+            }
+        }
+        else
+        {
+            await AnalyzeSlice(request.TargetFilePath, provider, rules);
+        }
+    }
 
-        var response = await provider.AnalyzeCodeAsync(new AnalysisRequest(code, rules, request.TargetFilePath));
+    private async Task AnalyzeSlice(string path, ILLMProvider provider, string rules)
+    {
+        string codeContext = "";
+        if (Directory.Exists(path))
+        {
+            var files = Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);
+            foreach (var file in files)
+            {
+                codeContext += $"\n// File: {Path.GetFileName(file)}\n" + await File.ReadAllTextAsync(file);
+            }
+        }
+        else
+        {
+            codeContext = await File.ReadAllTextAsync(path);
+        }
 
+        Console.WriteLine($"\n🔍 Analyzing Slice/File: {Path.GetFileName(path)}...");
+
+        var response = await provider.AnalyzeCodeAsync(new AnalysisRequest(codeContext, rules, path));
         RenderResult(response);
     }
 
