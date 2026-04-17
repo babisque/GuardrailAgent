@@ -1,4 +1,4 @@
-﻿namespace Guardrail.Core.Features.VerifyVsaCompliance;
+﻿namespace Guardrail.Features.VerifyVsaCompliance;
 
 public class RepositoryScanner
 {
