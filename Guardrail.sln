@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.6.11709.129 insiders
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Guardrail", "Guardrail.csproj", "{F11AF017-B70E-75D8-77F8-CAE33C97FC82}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F11AF017-B70E-75D8-77F8-CAE33C97FC82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11AF017-B70E-75D8-77F8-CAE33C97FC82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11AF017-B70E-75D8-77F8-CAE33C97FC82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11AF017-B70E-75D8-77F8-CAE33C97FC82}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7BF26777-F351-4FF9-8AFF-858AD8221532}
+	EndGlobalSection
+EndGlobal
