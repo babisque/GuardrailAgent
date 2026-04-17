@@ -16,7 +16,7 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="Core/rules/vsa-playbook.md">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>
 </Project>

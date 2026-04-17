@@ -1,15 +1,30 @@
-﻿namespace Guardrail.Features.VerifyVsaCompliance;
+﻿using System.Reflection;
+
+namespace Guardrail.Features.VerifyVsaCompliance;
 
 public record VerifyVsaRequest(string TargetFilePath, string ProviderName);
 
 public class VerifyVsaComplianceHandler(IEnumerable<ILLMProvider> providers, RepositoryScanner scanner)
 {
+    private async Task<string> GetEmbeddedPlaybookAsync()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        var resourceName = "Guardrail.Core.rules.vsa-playbook.md";
+
+        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+        if (stream == null) throw new FileNotFoundException($"Recurso '{resourceName}' não encontrado no assembly.");
+
+        using StreamReader reader = new StreamReader(stream);
+        return await reader.ReadToEndAsync();
+    }
+
     public async Task HandleAsync(VerifyVsaRequest request)
     {
         var provider = providers.FirstOrDefault(p => p.ProviderName == request.ProviderName)
             ?? throw new ArgumentException("Provider not found");
 
-        var rules = await File.ReadAllTextAsync("Core/rules/vsa-playbook.md");
+        var rules = await GetEmbeddedPlaybookAsync();
 
         if (Directory.Exists(request.TargetFilePath) &&
             Directory.GetDirectories(request.TargetFilePath, "Features").Any())
