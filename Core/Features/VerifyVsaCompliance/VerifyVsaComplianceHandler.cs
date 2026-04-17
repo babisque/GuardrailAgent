@@ -20,7 +20,7 @@ public class VerifyVsaComplianceHandler
         var result = await provider.AnalyzeCodeAsync(new AnalysisRequest(code, _playbook, targetPath));
 
         Console.WriteLine($"--- RESULT: ---");
-        Console.WriteLine(result.IsComplilant ? "✅ COMPLIANT" : "❌ NON-COMPLIANT");
+        Console.WriteLine(result.IsCompliant ? "✅ COMPLIANT" : "❌ NON-COMPLIANT");
         Console.WriteLine(result.Feedback);
     }
 }

@@ -29,8 +29,8 @@ public class VerifyVsaComplianceHandler
 
     private void RenderResult(AnalysisResponse response)
     {
-        var color = response.IsComplilant ? ConsoleColor.Green : ConsoleColor.Red;
-        var status = response.IsComplilant ? "[PASS]" : "[FAIL]";
+        var color = response.IsCompliant ? ConsoleColor.Green : ConsoleColor.Red;
+        var status = response.IsCompliant ? "[PASS]" : "[FAIL]";
 
         Console.ForegroundColor = color;
         Console.WriteLine($"{status} Architectural Conformity");
